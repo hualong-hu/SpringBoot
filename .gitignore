@@ -1,0 +1,4 @@
+# Project exclude paths
+/day03_SpringBoot_CRUD/target/
+/day04_SpringBoot_Data/target/
+/day12_SpringBoot_ActiveMQ_Queue_Produce/target/

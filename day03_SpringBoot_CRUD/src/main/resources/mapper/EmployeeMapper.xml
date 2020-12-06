@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.bigjava.mapper.EmployeeMapper">
+  <resultMap id="BaseResultMap" type="org.bigjava.bean.Employee">
+    <!--@mbg.generated-->
+    <!--@Table t_employee-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="last_name" jdbcType="VARCHAR" property="lastName" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="gender" jdbcType="INTEGER" property="gender" />
+    <result column="birth" jdbcType="DATE" property="birth" />
+    <result column="salary" jdbcType="INTEGER" property="salary" />
+    <result column="department_id" jdbcType="INTEGER" property="departmentId" />
+  </resultMap>
+
+  <resultMap id="BaseResultMapWithDepartment" type="org.bigjava.bean.Employee">
+    <!--@mbg.generated-->
+    <!--@Table t_employee-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="last_name" jdbcType="VARCHAR" property="lastName" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="gender" jdbcType="INTEGER" property="gender" />
+    <result column="birth" jdbcType="DATE" property="birth" />
+    <result column="salary" jdbcType="INTEGER" property="salary" />
+    <result column="department_id" jdbcType="INTEGER" property="departmentId" />
+    <association property="department" javaType="org.bigjava.bean.Department">
+      <id property="id" column="id"/>
+      <result property="departmentName" column="department_name"/>
+    </association>
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, last_name, email, gender, birth, salary, department_id
+  </sql>
+
+  <sql id="Base_Column_List_Department">
+    <!--@mbg.generated-->
+    e.id, e.last_name, e.email, e.gender, e.birth, e.salary, e.department_id,d.id,d.department_name
+  </sql>
+
+  <select id="findByAll" resultMap="BaseResultMapWithDepartment">
+    select
+    <include refid="Base_Column_List_Department"/>
+    from t_employee as e
+    left join t_department d on d.id = e.department_id
+    order by e.id
+  </select>
+
+  <select id="selectByPrimaryKeyWithDepartment" resultMap="BaseResultMapWithDepartment">
+    select
+    <include refid="Base_Column_List_Department" />
+    from t_employee as e
+    left join t_department d on d.id = e.department_id
+    where e.id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectAllByLastName" resultMap="BaseResultMapWithDepartment">
+    select
+    <include refid="Base_Column_List_Department" />
+    from t_employee as e
+    left join t_department d on d.id = e.department_id
+    where e.last_name = #{lastName,jdbcType=VARCHAR}
+  </select>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from t_employee
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from t_employee
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="org.bigjava.bean.Employee" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into t_employee (last_name, email, gender, 
+      birth, salary,  department_id
+      )
+    values (#{lastName,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{gender,jdbcType=INTEGER}, 
+      #{birth,jdbcType=DATE}, #{salary,jdbcType=INTEGER}, #{departmentId,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="org.bigjava.bean.Employee" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into t_employee
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="lastName != null">
+        last_name,
+      </if>
+      <if test="email != null">
+        email,
+      </if>
+      <if test="gender != null">
+        gender,
+      </if>
+      <if test="birth != null">
+        birth,
+      </if>
+      <if test="salary != null">
+        salary,
+      </if>
+
+      <if test="departmentId != null">
+        department_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="lastName != null">
+        #{lastName,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="gender != null">
+        #{gender,jdbcType=INTEGER},
+      </if>
+      <if test="birth != null">
+        #{birth,jdbcType=DATE},
+      </if>
+      <if test="salary != null">
+        #{salary,jdbcType=INTEGER},
+      </if>
+      <if test="departmentId != null">
+        #{departmentId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="org.bigjava.bean.Employee">
+    <!--@mbg.generated-->
+    update t_employee
+    <set>
+      <if test="lastName != null">
+        last_name = #{lastName,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="gender != null">
+        gender = #{gender,jdbcType=INTEGER},
+      </if>
+      <if test="birth != null">
+        birth = #{birth,jdbcType=DATE},
+      </if>
+      <if test="salary != null">
+        salary = #{salary,jdbcType=INTEGER},
+      </if>
+      <if test="departmentId != null">
+        department_id = #{departmentId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="org.bigjava.bean.Employee">
+    <!--@mbg.generated-->
+    update t_employee
+    set last_name = #{lastName,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      gender = #{gender,jdbcType=INTEGER},
+      birth = #{birth,jdbcType=DATE},
+      salary = #{salary,jdbcType=INTEGER},
+      department_id = #{departmentId,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+
+
+
+</mapper>

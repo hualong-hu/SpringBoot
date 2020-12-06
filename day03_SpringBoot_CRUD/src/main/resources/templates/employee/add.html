@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<!-- saved from url=(0052)http://getbootstrap.com/docs/4.0/examples/dashboard/ -->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<meta name="description" content="">
+		<meta name="author" content="">
+
+		<title>员工添加</title>
+		<!-- Bootstrap core CSS -->
+		<link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+
+		<!-- Custom styles for this template -->
+		<link  th:href="@{/css/dashboard.css}" rel="stylesheet">
+		<script type="text/javascript" th:src="@{/js/jquery-1.7.2.js}"></script>
+		<script type="text/javascript" th:src="@{/js/layDate-v5.0.9/laydate/laydate.js}"></script>
+	</head>
+
+	<body>
+		<!--
+			引入抽取的片段
+			模板名：会使用thymeleaf的前后缀配置规则进行解析
+		-->
+		<div th:replace="commons/bar :: topbar"></div>
+
+		<div class="container-fluid">
+			<div class="row">
+				<!-- 引入侧边栏 -->
+				<div th:replace="~{commons/bar :: #leftBar(empUri='emps')}"></div>
+
+				<main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+					<form class="col-md-8 offset-md-1" th:action="@{/employee}" method="post">
+						<div class="form-group">
+							<label>
+								姓名
+							</label>
+
+							<div class="input-group mb-3">
+								<div class="input-group-prepend">
+									<span class="input-group-text">
+										<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-file-person" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+											<path fill-rule="evenodd" d="M4 1h8a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2zm0 1a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1H4z"/>
+											<path d="M13.784 14c-.497-1.27-1.988-3-5.784-3s-5.287 1.73-5.784 3h11.568z"/>
+											<path fill-rule="evenodd" d="M8 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+										</svg>
+									</span>
+								</div>
+								<input name="lastName" type="text" class="form-control" required>
+							</div>
+
+
+						</div>
+						<div class="form-group">
+							<label>
+								邮箱
+							</label>
+
+							<div class="input-group mb-3">
+								<div class="input-group-prepend">
+									<span class="input-group-text">
+										<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-envelope" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+											<path fill-rule="evenodd" d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1H2zm13 2.383l-4.758 2.855L15 11.114v-5.73zm-.034 6.878L9.271 8.82 8 9.583 6.728 8.82l-5.694 3.44A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.739zM1 11.114l4.758-2.876L1 5.383v5.73z"/>
+										</svg>
+									</span>
+								</div>
+								<input id="saveEmail" name="email" type="email" class="form-control" required>
+								<div class="invalid-feedback"></div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label>性别</label>
+							<br/>
+							<div class="btn-group" data-toggle="buttons">
+								<label class="btn btn-secondary active">
+									<input type="radio" name="gender" value="1" id="option1" autocomplete="off" checked required>
+									<svg xmlns="http://www.w3.org/2000/svg" width="1.5rem" height="1.5rem" viewBox="0 0 2000 2200"><path fill="#ffffff" d="M384 8q108 0 182 74t74 182q0 108-74 182t-182 74q-108 0-182-74t-74-182q0-108 74-182T384 8zm192 576h-44q-72 32-148 32t-148-32h-44q-80 0-136 56T0 776v544q0 40 28 68t68 28h64v544q0 40 28 68t68 28h256q40 0 68-28t28-68v-544h64q40 0 68-28t28-68V776q0-80-56-136t-136-56z"></path></svg>
+									男
+								</label>
+								<label class="btn btn-secondary">
+									<input type="radio"  name="gender" value="0" id="option2" autocomplete="off" required>
+									<svg xmlns="http://www.w3.org/2000/svg" width="1.5rem" height="1.5rem" viewBox="0 0 2000 2200"><path fill="#ffffff" d="M512 8q108 0 182 74t74 182q0 108-74 182t-182 74q-108 0-182-74t-74-182q0-108 74-182T512 8zm476 1416l-158-309-34-459q-8-32-34-52t-58-20h-44q-72 32-148 32t-148-32h-44q-32 0-58 20t-34 52l-37 456-155 312q-12 48 16 84t76 36h224v416q0 40 28 68t68 28h128q40 0 68-28t28-68v-416h224q48 0 76-36t16-84z"></path></svg>
+									女
+								</label>
+							</div>
+							
+						</div>
+
+
+						<div class="form-group">
+							<label>
+								部门
+							</label>
+							<div class="input-group mb-3">
+								<div class="input-group-prepend">
+								<span class="input-group-text">
+									<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-building" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+										<path fill-rule="evenodd" d="M14.763.075A.5.5 0 0 1 15 .5v15a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5V14h-1v1.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V10a.5.5 0 0 1 .342-.474L6 7.64V4.5a.5.5 0 0 1 .276-.447l8-4a.5.5 0 0 1 .487.022zM6 8.694L1 10.36V15h5V8.694zM7 15h2v-1.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 .5.5V15h2V1.309l-7 3.5V15z"/>
+										<path d="M2 11h1v1H2v-1zm2 0h1v1H4v-1zm-2 2h1v1H2v-1zm2 0h1v1H4v-1zm4-4h1v1H8V9zm2 0h1v1h-1V9zm-2 2h1v1H8v-1zm2 0h1v1h-1v-1zm2-2h1v1h-1V9zm0 2h1v1h-1v-1zM8 7h1v1H8V7zm2 0h1v1h-1V7zm2 0h1v1h-1V7zM8 5h1v1H8V5zm2 0h1v1h-1V5zm2 0h1v1h-1V5zm0-2h1v1h-1V3z"/>
+									</svg>&nbsp;
+								</span>
+								</div>
+								<select class="custom-select" name="departmentId" required>
+									<option  selected>请选择部门</option>
+									<option  th:value="${dept.id}" th:each="dept:${departments}" th:text="${dept.departmentName}"></option>
+								</select>
+							</div>
+						</div>
+
+						<label>
+							薪资
+						</label>
+						<div class="input-group mb-3">
+							<div class="input-group-prepend">
+								<span class="input-group-text">
+									<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-gem" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+										<path fill-rule="evenodd" d="M3.1.7a.5.5 0 0 1 .4-.2h9a.5.5 0 0 1 .4.2l2.976 3.974c.149.185.156.45.01.644L8.4 15.3a.5.5 0 0 1-.8 0L.1 5.3a.5.5 0 0 1 0-.6l3-4zm11.386 3.785l-1.806-2.41-.776 2.413 2.582-.003zm-3.633.004l.961-2.989H4.186l.963 2.995 5.704-.006zM5.47 5.495l5.062-.005L8 13.366 5.47 5.495zm-1.371-.999l-.78-2.422-1.818 2.425 2.598-.003zM1.499 5.5l2.92-.003 2.193 6.82L1.5 5.5zm7.889 6.817l2.194-6.828 2.929-.003-5.123 6.831z"/>
+									</svg>&nbsp;
+								</span>
+							</div>
+							<input name="salary" id="saveSalary" type="text" class="form-control" required>
+							<div class="invalid-feedback"></div>
+						</div>
+
+						<div class="form-group">
+							<label>
+								生日
+							</label>
+							<div class="input-group mb-3">
+								<div class="input-group-prepend">
+									<span class="input-group-text">
+										<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-calendar2-check" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+											<path fill-rule="evenodd" d="M10.854 8.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708L7.5 10.793l2.646-2.647a.5.5 0 0 1 .708 0z"/>
+											<path fill-rule="evenodd" d="M14 2H2a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1zM2 1a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2H2z"/>
+											<path fill-rule="evenodd" d="M3.5 0a.5.5 0 0 1 .5.5V1a.5.5 0 0 1-1 0V.5a.5.5 0 0 1 .5-.5zm9 0a.5.5 0 0 1 .5.5V1a.5.5 0 0 1-1 0V.5a.5.5 0 0 1 .5-.5z"/>
+											<path d="M2.5 4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5H3a.5.5 0 0 1-.5-.5V4z"/>
+										</svg>&nbsp;
+									</span>
+								</div>
+								<input id="saveBirth" name="birth" type="text" class="form-control" placeholder="yyyy-MM-dd" required>
+								<div class="invalid-feedback"></div>
+							</div>
+
+						</div>
+						<button id="saveBtn" type="submit" class="btn btn-primary btn-block">添加</button>
+						<button  type="button" id="back" class="btn btn-block btn-secondary">返回</button>
+					</form>
+				</main>
+			</div>
+		</div>
+
+		<script type="text/javascript" th:src="@{/js/jquery-3.2.1.slim.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/popper.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+		<script type="text/javascript">
+			laydate.render({
+				elem: '#saveBirth' //指定元素
+				,theme: 'molv'
+			});
+
+			$(function () {
+				$("#saveBtn").click(function () {
+					if ($("#saveSalary").hasClass("is-invalid") || $("#saveBirth").hasClass("is-invalid") || $("#saveEmail").hasClass("is-invalid")){
+						return false;
+					}
+
+				})
+
+				$("#back").click(function () {
+					history.back();
+				})
+
+				//邮箱表单验证
+				$("#saveEmail").change(function () {
+					let saveEmail = $("#saveEmail");
+					let val = saveEmail.val();
+					var regExpEmail = /^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/;
+					if (regExpEmail.test(val)){
+						saveEmail.removeClass("is-invalid is-valid");
+						saveEmail.next("div").text("");
+					}else {
+						saveEmail.addClass("is-invalid");
+						saveEmail.next("div").text("请输入正确的邮箱格式");
+						return false;
+					}
+				})
+
+				//生日表单验证
+				$("#saveBirth").change(function () {
+					let saveBirth = $("#saveBirth");
+					let val = saveBirth.val();
+					var regExpBirth = /[0-9]{4}-[0-9]{2}-[0-9]{2}/;
+					if (regExpBirth.test(val)){
+						saveBirth.removeClass("is-invalid is-valid");
+						saveBirth.next("div").text("");
+					}else {
+						saveBirth.addClass("is-invalid");
+						saveBirth.next("div").text("请输入正确的时间格式：yyyy-MM-dd");
+						return false;
+					}
+				})
+
+				//薪资表单验证
+				$("#saveSalary").change(function () {
+					let saveSalary = $("#saveSalary");
+					let salary = saveSalary.val();
+					//1-8位数字
+					var regExp = /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/;
+					if (regExp.test(salary)){
+						saveSalary.removeClass("is-invalid is-valid");
+						saveSalary.next("div").text("");
+					}else{
+						saveSalary.addClass("is-invalid");
+						saveSalary.next("div").text("请输入正确的金额数（最多包含两位小数）");
+						return false;
+					}
+				})
+			})
+		</script>
+	</body>
+
+</html>

@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<!-- saved from url=(0052)http://getbootstrap.com/docs/4.0/examples/dashboard/ -->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<meta name="description" content="">
+		<meta name="author" content="">
+
+		<title>产品添加</title>
+		<!-- Bootstrap core CSS -->
+		<link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+
+		<!-- Custom styles for this template -->
+		<link  th:href="@{/css/dashboard.css}" rel="stylesheet">
+		<style type="text/css">
+			/* Chart.js */
+			
+			@-webkit-keyframes chartjs-render-animation {
+				from {
+					opacity: 0.99
+				}
+				to {
+					opacity: 1
+				}
+			}
+			
+			@keyframes chartjs-render-animation {
+				from {
+					opacity: 0.99
+				}
+				to {
+					opacity: 1
+				}
+			}
+
+		</style>
+		<link th:href="@{/webjars/jquery/3.3.1/jquery.js/jquery.min.js}">
+	</head>
+
+	<body>
+		<!--
+			引入抽取的片段
+			模板名：会使用thymeleaf的前后缀配置规则进行解析
+		-->
+		<div th:replace="commons/bar :: topbar"></div>
+
+		<div class="container-fluid">
+			<div class="row">
+				<!-- 引入侧边栏 -->
+				<div th:replace="~{commons/bar :: #leftBar(product='products')}"></div>
+
+				<main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+
+					<h1>添加产品</h1>
+					<div class="container">
+
+						<form  class="col-md-8 offset-md-1" th:action="@{/product}" method="post">
+							<!--
+                                  1、SpringMVC中配置HiddenHttpMethodFilter;（SpringBoot自动配置）
+                                  2、页面创建一个post表单
+                                  3、创建一个input项，name=“_method”;值就是我们指定的请求方式
+                              -->
+
+							<div class="form-group">
+								<label>产品名字</label>
+								<div class="input-group mb-3">
+									<div class="input-group-prepend">
+								<span class="input-group-text">
+
+									<svg  width="1rem" height="1rem" xmlns="http://www.w3.org/2000/svg" name="zi_verFlag" viewBox="0 0 2000 2000"><path d="M1393 225H408q-68 0-116 48t-48 116v1587l657-383 656 383V389q0-68-48-116t-116-48zm0 1464l-492-287-493 287V410q0-7 7-14t14-7h943q7 0 14 7t7 14v1279zM1184 570H605q-15 0-28 8-13 9-13 19v55q0 10 13 19 13 8 28 8h579q15 0 28-8 13-9 13-19v-55q0-10-13-19-13-8-28-8z"/></svg>
+								</span>
+									</div>
+									<input  id="name" name="name" type="text" class="form-control" required>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label>产品简介</label>
+								<div class="input-group mb-3">
+									<div class="input-group-prepend">
+								<span class="input-group-text">
+									<svg  width="1rem" height="1rem" xmlns="http://www.w3.org/2000/svg" name="zi_info" viewBox="0 0 2000 2000"><path d="M596 1727h80v-546h-80q-32 0-56-24t-24-56V939q0-32 24-56t56-24h448q32 0 56 24t24 56v788h80q32 0 56 24t24 56v112q0 32-24 56t-56 24H596q-32 0-56-24t-24-56v-112q0-32 24-56t56-24zM828 211q-120 0-204 84t-84 204q0 120 84 204t204 84q120 0 204-84t84-204q0-120-84-204t-204-84z"/></svg>
+								</span>
+									</div>
+									<input id="saveIntroduction" name="introduction" type="text" class="form-control" required>
+									<div class="invalid-feedback"></div>
+								</div>
+							</div>
+
+
+							<div class="form-group">
+								<label>产品成分</label>
+								<div class="input-group mb-3">
+									<div class="input-group-prepend">
+										<span class="input-group-text">
+											<svg  width="1rem" height="1rem" xmlns="http://www.w3.org/2000/svg" name="zi_vial" viewBox="0 0 2000 2000"><path d="M1374 198l-950 8q-14 3-22.5 11.5T390 241l2 172q3 14 11.5 22.5T423 444l65 2 9 1116q2 170 111.5 295T883 1992q93 7 176-26t145-96q121-122 119-292l-12-1142h63q17 0 25.5-8.5t7.5-25.5l-1-173q0-11-10-21t-22-10zm-249 613l-440 448-7-817 447-4v373z"/></svg>
+										</span>
+									</div>
+									<input id="saveIngredient" required name="ingredient" type="text" class="form-control">
+									<div class="invalid-feedback"></div>
+								</div>
+							</div>
+
+
+
+							<div class="form-group">
+							<label>产品售价</label>
+							<div class="input-group mb-3">
+								<div class="input-group-prepend">
+								<span class="input-group-text">
+									<svg  width="1rem" height="1rem" xmlns="http://www.w3.org/2000/svg" name="zi_moneybillwave" viewBox="0 0 2000 2000"><path d="M1747 531q-149-62-327-62-115 0-261 28-85 17-259 60.5T641 618q-146 25-261 25-138 0-259-36-17-6-31-6-37 0-63.5 25.5T0 691v892q0 28 14 50.5t39 33.5q150 62 327 62 115 0 261-28 85-17 259-60.5t259-60.5q146-25 261-25 138 0 259 36 17 6 31 6 37 0 63.5-25.5t26.5-64.5V615q0-28-14-50.5t-39-33.5zM135 750q76 20 177 26-14 61-63 103.5T135 922V750zm0 802v-135q73 0 125 50.5t55 123.5q-96-8-180-39zm765-183q-93 0-159-79t-66-191.5q0-112.5 66-191T900 829q93 0 159 78.5t66 191q0 112.5-66 191.5t-159 79zm765 79q-65-17-152-26 11-53 53.5-91t98.5-46v163zm0-664q-65-8-110-57.5T1508 610q84 8 157 36v138z"/></svg>
+								</span>
+								</div>
+								<input id="saveSalary" required  name="sell"  type="text" class="form-control" aria-label="Dollar amount (with dot and two decimal places)">
+								<div class="invalid-feedback"></div>
+							</div>
+							</div>
+
+							<div class="form-group">
+								<label>产品成本</label>
+								<div class="input-group mb-3">
+									<div class="input-group-prepend">
+									<span class="input-group-text">
+										<svg  width="1rem" height="1rem" xmlns="http://www.w3.org/2000/svg" name="zi_moneybill" viewBox="0 0 2000 2000"><path d="M1709 561H91q-37 0-63.5 27T1 651v899q0 37 26.5 63.5T91 1640h1618q37 0 63.5-26.5t26.5-63.5V651q0-36-26.5-63t-63.5-27zM136 1505v-180q76 0 128 52t52 128H136zm0-629V696h180q0 76-52 128t-128 52zm764 494q-93 0-159-78.5t-66-191q0-112.5 66-191T900 831q93 0 159 78.5t66 191q0 112.5-66 191T900 1370zm764 135h-180q0-76 52-128t128-52v180zm0-629q-76 0-128-52t-52-128h180v180z"/></svg>
+									</span>
+									</div>
+									<input id="saveBirth" required name="cost" type="text" class="form-control">
+									<div class="invalid-feedback"></div>
+								</div>
+
+
+							</div>
+							<button id="saveBtn" type="submit" class="btn btn-primary btn-block">添加</button>
+							<button  type="button" id="back" class="btn btn-block btn-secondary">返回</button>
+						</form>
+
+
+					</div>
+
+				</main>
+
+			</div>
+		</div>
+
+		<script type="text/javascript" th:src="@{/js/jquery-3.2.1.slim.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/popper.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+
+		<script type="text/javascript" th:src="@{/js/jquery-1.7.2.js}"></script>
+
+		<script type="text/javascript" th:src="@{/js/feather.min.js}" ></script>
+		<script>
+			feather.replace()
+		</script>
+
+		<script type="text/javascript" th:src="@{/js/Chart.min.js}" ></script>
+		<script>
+			var ctx = document.getElementById("myChart");
+			var myChart = new Chart(ctx, {
+				type: 'line',
+				data: {
+					labels: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+					datasets: [{
+						data: [15339, 21345, 18483, 24003, 23489, 24092, 12034],
+						lineTension: 0,
+						backgroundColor: 'transparent',
+						borderColor: '#007bff',
+						borderWidth: 4,
+						pointBackgroundColor: '#007bff'
+					}]
+				},
+				options: {
+					scales: {
+						yAxes: [{
+							ticks: {
+								beginAtZero: false
+							}
+						}]
+					},
+					legend: {
+						display: false,
+					}
+				}
+			});
+		</script>
+		<script type="text/javascript">
+			$(function () {
+
+				// if ($("#saveIngredient").val() !== "" || $("#cost").val() !== null || $("#name") !== null || $("#saveIntroduction") !== null || $("#saveSalary") !== null){
+				// 	$("#saveBtn").click(function () {
+				// 		alert("产品添加成功！");
+				// 	})
+				// }
+				$("#back").click(function () {
+					history.back();
+				})
+
+
+			})
+
+		</script>
+	</body>
+
+</html>

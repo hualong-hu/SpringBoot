@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<!-- saved from url=(0052)http://getbootstrap.com/docs/4.0/examples/dashboard/ -->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<meta name="description" content="">
+		<meta name="author" content="">
+
+		<title>产品</title>
+		<!-- Bootstrap core CSS -->
+		<link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+
+		<!-- Custom styles for this template -->
+		<link  th:href="@{/css/dashboard.css}" rel="stylesheet">
+		<style type="text/css">
+			/* Chart.js */
+			
+			@-webkit-keyframes chartjs-render-animation {
+				from {
+					opacity: 0.99
+				}
+				to {
+					opacity: 1
+				}
+			}
+			
+			@keyframes chartjs-render-animation {
+				from {
+					opacity: 0.99
+				}
+				to {
+					opacity: 1
+				}
+			}
+			
+			.chartjs-render-monitor {
+				-webkit-animation: chartjs-render-animation 0.001s;
+				animation: chartjs-render-animation 0.001s;
+			}
+		</style>
+		<link th:href="@{/webjars/jquery/3.3.1/jquery.js/jquery.min.js}">
+	</head>
+
+	<body>
+		<!--
+			引入抽取的片段
+			模板名：会使用thymeleaf的前后缀配置规则进行解析
+		-->
+		<div th:replace="commons/bar :: topbar"></div>
+
+		<div class="container-fluid">
+			<div class="row">
+
+				<!-- 引入侧边栏 -->
+				<div th:replace="~{commons/bar :: #leftBar(product='products')}"></div>
+
+				<main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+
+					<div class="container">
+						<div class="row">
+							<h2>产品页面</h2>
+							<div class="col-md-3 offset-md-5">
+								<a th:href="@{/toAddPage}" class="btn btn-success" >
+									<svg xmlns="http://www.w3.org/2000/svg" width="1rem" height="1rem" viewBox="0 -300 2000 2200"><path fill="#ffffff" d="M1664 840h-576V264q0-52-38-90t-90-38H832q-52 0-90 38t-38 90v576H128q-52 0-90 38T0 968v128q0 52 38 90t90 38h576v576q0 52 38 90t90 38h128q52 0 90-38t38-90v-576h576q52 0 90-38t38-90V968q0-52-38-90t-90-38z"></path></svg>
+									新增产品
+								</a>
+							</div>
+
+						</div>
+							<div class="row">
+
+								<div style="position: absolute;left: 0;top: 300px">
+									<a href="" th:if="${info.hasPreviousPage}" th:href="@{'/products?pageNum='+${info.pageNum-1}}">
+										<svg  width="3rem" height="3rem" xmlns="http://www.w3.org/2000/svg" name="zi_circlelefts" viewBox="0 0 2000 2000"><path d="M900 1999q-243 0-450-121.5T121.5 1549Q0 1342 0 1099t121.5-450Q243 442 450 320.5T900 199q243 0 450 121.5T1678.5 649Q1800 856 1800 1099t-121.5 450Q1557 1756 1350 1877.5T900 1999zm80-348q25 29 61.5 29t61.5-26l62-65q25-25 25-59.5t-29-60.5l-366-370 370-370q25-26 25-62t-29-58l-58-65q-29-26-63.5-26T980 544l-519 555 519 552z"/></svg>
+									</a>
+								</div>
+
+								<div th:each="pro:${products}" class="card text-center" style="width: 14rem; ">
+<!--									<img th:src="@{/img/product.png}" height="170px" width="100px" class="card-img-top" alt="...">-->
+									<div class="text-center">
+										<svg xmlns="http://www.w3.org/2000/svg" width="10rem" height="10rem" viewBox="0 0 1000 2200"><path fill="#c11616" d="M840 1572l-56 100-20 320q0 28-74 46t-178 18q-104 0-178-18t-74-46l-24-320-60-100q124 52 334 52t330-52zM56 560l52 500q20-68 60-128 48-68 100-92 40-16 76 4 16 8 28 24t12 24q4 16-2 26t-16 10q-10 0-26-28-24-44-68-12-36 24-68 82t-48 112q-16 54-4 82 8 12 20 12 24 0 62-38t54-66l20-60q8-20 24-20t16 22q0 22-16 62t-24 72l-32 104q-4 12-10 22t-14 10q-8 0-12-6t-2-24q2-18 30-102l-28 28q-48 44-84 44-20 0-32-8l32 316q4 20 104 44 116 28 248 28t248-28q96-24 104-44l44-376-8 4q-44 44-68 54t-48 6q-24-4-24-24t44-72l12-20q20-20 20-30t-16-8q-16 2-32 16t-34 40q-18 26-34 62l-16 32-40 112q-8 12-20 18t-20 0q-8-6-8-14l4-12q4-16 32-76l28-60q4-16 4-12-32 32-56 42t-40 6q-16-4-20-20l-4-8q-40 32-66 28t-14-60q-32 60-88 60-28 0-36-20t20-92v-4q12-28 28-64 12-24 32-16h4q12 8 4 32l-12 16q-20 40-28 64-8 36 6 36t30-8q24-16 42-50t22-54l8-20q8-20 18-20t18 8q8 8 0 28l-28 64q-12 32-12 48t28 4q12-4 28-16 4-16 64-172l40-100q8-20 28-20 4 0 12 6t4 22l-72 172q-28 72-34 92t2 20q28 0 92-68l4-4 12-28q8-28 16-36t12-8q16 0 16 14t-4 26l20-20q40-36 70-30t30 34q0 28-52 92l-8 4q-12 20-12 24t8 4q8 0 28-16l68-60 60-544q-60 32-264 44-192 12-384 0-204-12-264-44zm920-36q0 40-240 56-224 16-448 0-240-16-240-56 0-24 136-44t328-20l104 4 52-196L912 12q4-4 16-2t24 14q32 28 20 36L744 304l-40 164q120 8 194 24t74 32h4zm-280 20q0-4-8-8l-4 4q0 8-44 8t-44-8l4-4q-12 4-12 8t16 10q16 6 38 6t38-6q16-6 16-10z"></path></svg>
+									</div>
+									<div class="card-body">
+										<h4 class="card-title" th:text="${pro.name}"></h4>
+										<!--<p class="card-text">非常好喝的奶茶</p>-->
+									</div>
+									<ul class="list-group list-group-flush">
+										<!--									<li class="list-group-item" >简介：[[${pro.introduction}]]</li>-->
+										<li class="list-group-item" >
+											<button class="btn btn-outline-info" data-toggle="modal" th:attr="data-target=${'#'+pro.id}" data-target="" id="myModel">点击查看详情</button>
+										</li>
+										<li class="list-group-item" ><strong>售价：<kbd>[[${pro.sell}]]</kbd>元</strong></li>
+										<li class="list-group-item"><strong>成本：<kbd>[[${pro.cost}]]</kbd>元</strong></li>
+									</ul>
+									<div class="card-body">
+										<a href="#" th:href="@{/product/{id}(id=${pro.id})}" class="btn card-link btn-primary">
+											<svg id="i-edit" xmlns="http://www.w3.org/2000/svg" viewBox="0 -5 32 32" width="16" height="18" fill="none" stroke="currentcolor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+												<path d="M30 7 L25 2 5 22 3 29 10 27 Z M21 6 L26 11 Z M5 22 L10 27 Z" />
+											</svg>
+											编辑
+										</a>
+										<a href="#" id="deleteBtn" th:attr="delete_url=@{/product/{id}(id=${pro.id})}" class="btn card-link btn-danger">
+											<svg xmlns="http://www.w3.org/2000/svg" width="17" height="18" viewBox="0 -500 2000 2600"><path fill="#ffffff" d="M0 344V232q0-40 28-68t68-28h448l36-76q12-24 36-38t52-14h456q28 0 52 14t36 38l36 76h448q40 0 68 28t28 68v112q0 20-14 34t-34 14H48q-20 0-34-14T0 344zm1664 224v1296q0 80-56 136t-136 56H320q-80 0-136-56t-56-136V568q0-20 14-34t34-14h1440q20 0 34 14t14 34zM712 840q0-28-26-46t-66-18q-40 0-66 18t-26 46v896q0 28 26 46t66 18q40 0 66-18t26-46V840zm552 0q0-28-26-46t-66-18q-40 0-66 18t-26 46v896q0 28 26 46t66 18q40 0 66-18t26-46V840z"></path>
+											</svg>
+											删除
+										</a>
+									</div>
+
+									<!-- 商品简介模态框  -->
+									<div class="modal fade" th:attr="id=${pro.id}" id=""  data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+										<div class="modal-dialog">
+											<div class="modal-content">
+												<div class="modal-header">
+													<h5 class="modal-title" id="staticBackdropLabel">[[${pro.name}]]</h5>
+													<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+														<span aria-hidden="true">&times;</span>
+													</button>
+												</div>
+												<div class="modal-body" >
+													<p class="mark" th:text="${pro.introduction}">
+
+													</p>
+													<p class="mark" th:text="${pro.ingredient}"></p>
+												</div>
+
+											</div>
+										</div>
+									</div>
+
+								</div>
+
+								<div style="position: absolute;right: 0;top: 300px">
+									<a href="" th:if="${info.hasNextPage}" th:href="@{'/products?pageNum='+${info.pageNum+1}}">
+										<svg  width="3rem" height="3rem" xmlns="http://www.w3.org/2000/svg" name="zi_circleRights" viewBox="0 0 2000 2000"><path d="M900 200q243 0 450 121.5T1678.5 650Q1800 857 1800 1100t-121.5 450Q1557 1757 1350 1878.5T900 2000q-243 0-450-121.5T121.5 1550Q0 1343 0 1100t121.5-450Q243 443 450 321.5T900 200zm-80 345q-25-26-61.5-26T700 545l-61 61q-29 29-29 63.5t29 60.5l366 370-366 370q-29 26-29 62t29 62l61 58q26 29 60.5 29t59.5-26l519-555-519-555z"/></svg>
+									</a>
+								</div>
+
+							</div>
+					</div>
+
+					<div class="container">
+						<div class="offset-1 col-sm-4 text-center h6 mark">
+							当前第<kbd th:text="${info.pageNum}"></kbd>页，共有<kbd th:text="${info.pages}">1</kbd>页，总计<kbd th:text="${info.total}"></kbd>条记录
+						</div>
+						<nav aria-label="Page navigation example" class="offset-6">
+							<ul class="pagination">
+								<li class="page-item" th:class="${info.pageNum == 1?'page-item disabled':'page-item'}">
+									<a class="page-link" href="#" th:href="@{'/products?pageNum=1'}">
+										首页
+									</a>
+								</li>
+
+								<li class="page-item" th:class="${pageNum == info.pageNum}?'page-item active':'page-item'" th:each="pageNum:${info.navigatepageNums}">
+									<a class="page-link" th:href="@{'/products?pageNum='+${pageNum}}" href="#">[[${pageNum}]]</a>
+								</li>
+
+
+								<li class="page-item disabled" th:class="${info.pageNum == info.pages}?'page-item disabled':'page-item'">
+									<a class="page-link"  th:href="@{'/products?pageNum='+${info.pages}}" href="#">尾页</a>
+								</li>
+							</ul>
+						</nav>
+
+					</div>
+
+				</main>
+				<form method="post" id="deleteForm">
+					<input type="hidden" name="_method" value="delete">
+				</form>
+			</div>
+		</div>
+
+		<script type="text/javascript" th:src="@{/js/jquery-3.2.1.slim.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/popper.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+
+		<script type="text/javascript" th:src="@{/js/jquery-1.7.2.js}"></script>
+
+		<script type="text/javascript" th:src="@{/js/feather.min.js}" ></script>
+		<script>
+			feather.replace()
+		</script>
+
+		<script type="text/javascript" th:src="@{/js/Chart.min.js}" ></script>
+		<script>
+			var ctx = document.getElementById("myChart");
+			var myChart = new Chart(ctx, {
+				type: 'line',
+				data: {
+					labels: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+					datasets: [{
+						data: [15339, 21345, 18483, 24003, 23489, 24092, 12034],
+						lineTension: 0,
+						backgroundColor: 'transparent',
+						borderColor: '#007bff',
+						borderWidth: 4,
+						pointBackgroundColor: '#007bff'
+					}]
+				},
+				options: {
+					scales: {
+						yAxes: [{
+							ticks: {
+								beginAtZero: false
+							}
+						}]
+					},
+					legend: {
+						display: false,
+					}
+				}
+			});
+		</script>
+		<script type="text/javascript">
+			$(function () {
+				$(document).on("click","#deleteBtn",function () {
+					// var name = $(this).parents("div").find("h4:eq(0)").text();
+					// var name = $("#proName").text();
+					var attr = $(this).attr("delete_url");
+					var b = confirm("确定要删除吗？");
+					if (b){
+						$("#deleteForm").attr("action",attr).submit();
+					}
+					return false;
+				})
+
+			})
+		</script>
+
+	</body>
+
+</html>

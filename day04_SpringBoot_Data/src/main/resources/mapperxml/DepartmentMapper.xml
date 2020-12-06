@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.bigjava.mapper.DepartmentMapper">
+  <resultMap id="BaseResultMap" type="org.bigjava.bean.Department">
+    <!--@mbg.generated-->
+    <!--@Table t_department-->
+    <id column="department_id" jdbcType="INTEGER" property="departmentId" />
+    <result column="department_name" jdbcType="VARCHAR" property="departmentName" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    department_id, department_name
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from t_department
+    where department_id = #{departmentId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from t_department
+    where department_id = #{departmentId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="department_id" keyProperty="departmentId" parameterType="org.bigjava.bean.Department" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into t_department (department_name)
+    values (#{departmentName,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" keyColumn="department_id" keyProperty="departmentId" parameterType="org.bigjava.bean.Department" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into t_department
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="departmentName != null">
+        department_name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="departmentName != null">
+        #{departmentName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="org.bigjava.bean.Department">
+    <!--@mbg.generated-->
+    update t_department
+    <set>
+      <if test="departmentName != null">
+        department_name = #{departmentName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where department_id = #{departmentId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="org.bigjava.bean.Department">
+    <!--@mbg.generated-->
+    update t_department
+    set department_name = #{departmentName,jdbcType=VARCHAR}
+    where department_id = #{departmentId,jdbcType=INTEGER}
+  </update>
+</mapper>

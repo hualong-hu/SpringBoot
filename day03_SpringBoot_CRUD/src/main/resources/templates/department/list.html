@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<!-- saved from url=(0052)http://getbootstrap.com/docs/4.0/examples/dashboard/ -->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>部门</title>
+    <!-- Bootstrap core CSS -->
+    <script type="text/javascript" th:src="@{/js/jquery-3.5.1.js}"></script>
+<!--    <link th:href="@{/webjars/jquery/3.3.1/jquery.js}">-->
+<!--    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">-->
+    <link th:href="@{/webjars/bootstrap/4.0.0/css/bootstrap.css}" rel="stylesheet">
+    <link th:href="@{/css/dashboard.css}" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+
+
+
+    <script type="text/javascript">
+        $(function () {
+
+
+            //打开添加员工模态框
+            $("#addBtn").click(function () {
+
+                $("#addModal").modal({
+                    backdrop:"static"
+                });
+            })
+            //为添加部门按钮绑定单击事件，发送ajax请求完成部门保存
+            $("#saveDepartment").click(function () {
+                if ($("#inputManager").hasClass("is-invalid") || $("#inputName").hasClass("is-invalid")){
+                    return false;
+                }else {
+                    $.ajax({
+                        url: '/department',
+                        data:$("#departmentForm").serialize(),
+                        type:'POST',
+                        success:function (result) {
+                            if (result.msg != null){
+                                alert(result.msg);
+                                $("#updateModal").modal('hide');
+                                location.reload();
+                            }else {
+                                alert("部门添加失败，请重新输入！");
+                                return false;
+                            }
+                        }
+                    })
+                }
+
+            })
+            //校验员工表中是否有此人
+            check("#inputManager","checkEmployee");
+
+            //新增部门时，校验该部门是否存在
+            check("#inputName","checkDepartmentName");
+
+            //新增部门时，校验该地址是否有部门使用
+            check("#inputAddress","checkAddress")
+
+
+
+
+            //为删除按钮绑定单击事件
+           $(document).on("click","#deleteBtn",function () {
+               var name = $(this).parents("tr").find("td:eq(0)").text();
+               var id = $(this).parents("tr").find("th:eq(0)").text();
+               if ( confirm("确定要取消【"+name+"】吗？")){
+                   $.ajax({
+                       url:"/department/"+id,
+                       type:"DELETE",
+                       success:function (result) {
+                            alert(name+result.msg);
+                            location.reload();
+                       }
+                   })
+               }
+           })
+
+            //为编辑按钮绑定单击事件，并发送ajax请求回显表单
+            $(document).on("click","#updateBtn",function () {
+                var id = $(this).parents("tr").find("th:eq(0)").text();
+                $.ajax({
+                    url:"/department/"+id,
+                    type:"GET",
+                    success:function (result) {
+                        $("#updateName").val(result.department.departmentName);
+                        $("#updateManager").val(result.department.manager);
+                        $("#updateAddress").val(result.department.address);
+                        $("#hidden").val(result.department.id);
+                    }
+                })
+                $("#updateModal").modal({
+                    backdrop:false
+                })
+
+
+
+            })
+
+            //点击修改部门模态框的保存按钮完成修改！
+            $("#saveBtn").click(function () {
+                $.ajax({
+                    url:"department",
+                    type:"PUT",
+                    data:$("#updateForm").serialize(),
+                    success:function (result) {
+                        alert(result.msg);
+
+                        //关闭模态框
+                        $("#updateModal").modal('hide')
+                        location.href="http://localhost:8080/departments";
+                    }
+                })
+            })
+
+            $("#closeAdd").click(function () {
+
+                $("#addModal").modal('hide');
+                
+                $("#departmentForm")[0].reset();
+                reset1("#inputManager");
+                reset1("#inputName");
+                reset1("#inputAddress");
+            })
+
+
+
+        })
+
+        //校验是否存在
+        function check(element,url){
+            $(element).change(function () {
+                var name = $(element);
+                name.removeClass("is-invalid is-valid");
+                name.next("div").text("");
+                $.ajax({
+                    url:url,
+                    data:name.serialize(),
+                    type: 'get',
+                    success:function (result) {
+                        if (result.msg != null){
+                            name.addClass("is-invalid");
+                            name.next("div").text(result.msg);
+
+                        }
+                    }
+                })
+            })
+        }
+
+        function reset1(element) {
+            var name = $(element);
+            name.removeClass("is-invalid is-valid");
+            name.next("div").text("");
+        }
+
+    </script>
+
+</head>
+
+<body>
+<!--
+    引入抽取的片段
+    模板名：会使用thymeleaf的前后缀配置规则进行解析
+-->
+<div th:replace="commons/bar :: topbar"></div>
+
+<div class="container-fluid">
+    <div class="row">
+
+        <!-- 引入侧边栏 -->
+        <div th:replace="~{commons/bar :: #leftBar(department='department')}"></div>
+
+        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+
+            <h1>部门</h1>
+
+
+            <table class="table table-striped">
+                <thead class="table-dark">
+                <tr>
+                    <th scope="col">id</th>
+                    <th scope="col">部门名称</th>
+                    <th scope="col">部门经理</th>
+                    <th scope="col">部门地址</th>
+                    <th scope="col">部门人数</th>
+                    <th scope="col">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="dep:${departments}">
+                    <th th:text="${dep.id}"></th>
+                    <td th:text="${dep.departmentName}"></td>
+                    <td th:text="${dep.manager}"></td>
+                    <td th:text="${dep.address}">@</td>
+                    <!--/*@thymesVar id="personCount" type=""*/-->
+                    <td th:text="${dep.personcount}"></td>
+                    <td>
+                        <button id="updateBtn" type="button" class="btn btn-primary btn-sm">
+						<svg id="i-edit" xmlns="http://www.w3.org/2000/svg" viewBox="0 -5 32 32" width="16"
+							 height="18" fill="none" stroke="currentcolor" stroke-linecap="round"
+							 stroke-linejoin="round" stroke-width="2">
+							<path d="M30 7 L25 2 5 22 3 29 10 27 Z M21 6 L26 11 Z M5 22 L10 27 Z"/>
+						</svg>
+                            编辑
+                        </button>
+
+                        <button id="deleteBtn" type="button" class="btn btn-danger btn-sm">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="17" height="18" viewBox="0 -500 2000 2600">
+                                <path fill="#ffffff"
+                                      d="M0 344V232q0-40 28-68t68-28h448l36-76q12-24 36-38t52-14h456q28 0 52 14t36 38l36 76h448q40 0 68 28t28 68v112q0 20-14 34t-34 14H48q-20 0-34-14T0 344zm1664 224v1296q0 80-56 136t-136 56H320q-80 0-136-56t-56-136V568q0-20 14-34t34-14h1440q20 0 34 14t14 34zM712 840q0-28-26-46t-66-18q-40 0-66 18t-26 46v896q0 28 26 46t66 18q40 0 66-18t26-46V840zm552 0q0-28-26-46t-66-18q-40 0-66 18t-26 46v896q0 28 26 46t66 18q40 0 66-18t26-46V840z"></path>
+                            </svg>
+                            删除
+                        </button>
+
+
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <button id="addBtn" class="btn btn-success">
+                新设部门
+            </button>
+
+        </main>
+
+	</div>
+</div>
+<!-- 新增部门模态框 -->
+<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">部门开设</h4>
+            </div>
+            <div class="modal-body">
+                <!-- 新增部门表单 -->
+                <form  class="form-horizontal" id="departmentForm">
+                    <div class="form-group">
+                        <label for="inputName" class="col-sm-3 control-label">部门名称</label>
+                        <div class="col-sm-10">
+                            <input name="departmentName" type="text" class="form-control" id="inputName" required>
+                            <div class="invalid-feedback"></div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="inputManager" class="col-sm-3 control-label">部门经理</label>
+                        <div class="col-sm-10">
+                            <input name="manager" type="text" class="form-control" id="inputManager" required>
+                            <div class="invalid-feedback"></div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="inputAddress" class="col-sm-3 control-label">部门地址</label>
+                        <div class="col-sm-10">
+                            <input name="address" type="text" class="form-control" id="inputAddress" required>
+                            <div class="invalid-feedback"></div>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" id="closeAdd" >关闭</button>
+                <button type="button" class="btn btn-primary" id="saveDepartment">保存</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 修改部门模态框 -->
+<div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="updateModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="updateModalLabel">修改部门</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <form  class="form-horizontal" id="updateForm">
+                    <input type="hidden" id="hidden" name="id">
+                    <div class="form-group">
+                        <label for="updateName" class="col-sm-3 control-label">部门名称</label>
+                        <div class="col-sm-10">
+                            <input name="departmentName" type="text" class="form-control" id="updateName" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="updateManager" class="col-sm-3 control-label">部门经理</label>
+                        <div class="col-sm-10">
+                            <input name="manager" type="text" class="form-control" id="updateManager" required>
+                            <div class="invalid-feedback"></div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="updateAddress" class="col-sm-3 control-label">部门地址</label>
+                        <div class="col-sm-10">
+                            <input name="address" type="text" class="form-control" id="updateAddress" required>
+                            <div class="invalid-feedback"></div>
+                        </div>
+                    </div>
+                </form>
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary closeBtn" data-dismiss="modal">关闭</button>
+                <button type="button" id="saveBtn" class="btn btn-primary">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script type="text/javascript" th:src="@{/js/popper.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+
+
+<script type="text/javascript" th:src="@{/js/feather.min.js}"></script>
+<script>
+    feather.replace()
+</script>
+
+<script type="text/javascript" th:src="@{/js/Chart.min.js}"></script>
+<script>
+    var ctx = document.getElementById("myChart");
+    var myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+            datasets: [{
+                data: [15339, 21345, 18483, 24003, 23489, 24092, 12034],
+                lineTension: 0,
+                backgroundColor: 'transparent',
+                borderColor: '#007bff',
+                borderWidth: 4,
+                pointBackgroundColor: '#007bff'
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: false
+                    }
+                }]
+            },
+            legend: {
+                display: false,
+            }
+        }
+    });
+</script>
+
+
+</body>
+
+</html>
